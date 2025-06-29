@@ -1,0 +1,50 @@
+<!-- Tela administrador-->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Criar Votação</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Admin - Criar Votação</h1>
+
+    <div id="form">
+        <input type="text" id="titulo" placeholder="Título da votação"><br><br>
+
+        <input type="text" id="op1" placeholder="Opção 1"><br>
+        <input type="text" id="op2" placeholder="Opção 2"><br>
+        <input type="text" id="op3" placeholder="Opção 3 (opcional)"><br>
+        <input type="text" id="op4" placeholder="Opção 4 (opcional)"><br><br>
+
+        <button onclick="criarVotacao()">Criar Votação</button>
+    </div>
+
+    <script>
+        const socket = new WebSocket(`ws://${window.location.host}`);
+
+        function criarVotacao() {
+            const titulo = document.getElementById('titulo').value.trim();
+            const opcoes = [
+                document.getElementById('op1').value.trim(),
+                document.getElementById('op2').value.trim(),
+                document.getElementById('op3').value.trim(),
+                document.getElementById('op4').value.trim()
+            ].filter(o => o.length > 0);
+
+            if (titulo && opcoes.length >= 2) {
+                const dados = {
+                    tipo: 'criar',
+                    titulo,
+                    opcoes
+                };
+                socket.send(JSON.stringify(dados));
+                alert('Votação criada com sucesso!');
+            } else {
+                alert('Informe um título e pelo menos duas opções.');
+            }
+        }
+    </script>
+</body>
+</html>
